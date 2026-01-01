@@ -143,6 +143,7 @@ Contributions are welcome!
 2. Create a new branch (`feature/your-feature`)
 3. Commit your changes
 4. Open a Pull Request
+5. Read the contributor.md guidelines
 
 ---
 
