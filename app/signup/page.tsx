@@ -207,12 +207,12 @@ export default function SignupPage() {
 
                 {/* Submit Button */}
                 <Button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full glassmorphic-button-primary text-foreground font-semibold"
-                >
-                  {isLoading ? "Creating Account..." : "Create Account"}
-                </Button>
+              type="submit"
+              disabled={isLoading}
+              className="w-full glassmorphic-button-primary font-semibold"
+            >
+              {isLoading ? "Creating Account..." : "Create Account"}
+            </Button>
               </form>
             </div>
 
