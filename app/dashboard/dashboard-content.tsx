@@ -108,7 +108,7 @@ export default function DashboardContent() {
                   className="glass-input w-full pl-10"
                 />
               </div>
-              <Button className="glassmorphic-button-primary text-foreground">Search</Button>
+              <Button className="glassmorphic-button-primary">Search</Button>
             </div>
           </div>
         </div>

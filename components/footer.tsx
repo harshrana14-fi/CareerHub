@@ -1,3 +1,5 @@
+"use client"
+
 import { Github, Twitter, Linkedin } from "lucide-react"
 
 export default function Footer() {

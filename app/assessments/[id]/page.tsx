@@ -179,7 +179,7 @@ export default function AssessmentPage() {
               {/* Start Button */}
               <Button 
                 onClick={() => setQuizStarted(true)}
-                className="w-full glassmorphic-button-primary text-lg py-6"
+                className="w-full glassmorphic-button-primary text-foreground text-lg py-6"
               >
                 Start Assessment
               </Button>

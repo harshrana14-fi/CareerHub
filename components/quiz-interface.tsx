@@ -170,7 +170,7 @@ export default function QuizInterface({ assessmentId, assessment, onComplete }: 
             {currentQuestion === questions.length - 1 ? (
               <Button 
                 onClick={handleSubmit}
-                className="glassmorphic-button-primary flex items-center gap-2"
+                className="glassmorphic-button-primary text-foreground flex items-center gap-2"
               >
                 <Flag className="w-4 h-4" />
                 Submit Assessment

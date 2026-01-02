@@ -44,7 +44,7 @@ export default function Header() {
             </Button>
           </Link>
           <Link href="/signup">
-            <Button className="glassmorphic-button-primary text-black">Sign Up</Button>
+            <Button className="glassmorphic-button-primary">Sign Up</Button>
           </Link>
         </div>
 
@@ -77,7 +77,7 @@ export default function Header() {
                   </Button>
                 </Link>
                 <Link href="/signup" className="flex-1">
-                  <Button className="w-full glassmorphic-button-primary text-black">Sign Up</Button>
+                  <Button className="w-full glassmorphic-button-primary">Sign Up</Button>
                 </Link>
               </div>
             </div>

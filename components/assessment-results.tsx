@@ -124,7 +124,7 @@ export default function AssessmentResults({ results, assessment, assessmentId }:
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-4 justify-center">
               {results.passed && (
-                <Button onClick={generateCertificate} className="glassmorphic-button-primary">
+                <Button onClick={generateCertificate} className="glassmorphic-button-primary text-foreground">
                   <Download className="w-4 h-4 mr-2" />
                   Download Certificate
                 </Button>

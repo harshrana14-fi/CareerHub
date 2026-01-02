@@ -139,7 +139,7 @@ export default function AssessmentGrid() {
 
                   {/* CTA Button */}
                   <Link href={`/assessments/${assessment.id}`}>
-                    <Button className="w-full glassmorphic-button-primary group-hover:scale-105 transition-transform">
+                    <Button className="w-full glassmorphic-button-primary text-foreground group-hover:scale-105 transition-transform">
                       Start Assessment
                     </Button>
                   </Link>
