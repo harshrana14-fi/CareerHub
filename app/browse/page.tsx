@@ -9,7 +9,9 @@ import Link from "next/link";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { CompanyDataManager } from "@/lib/company-data";
+import { OpportunityService } from "@/lib/services/opportunities";
 import BookmarkButton from "@/components/bookmark-button";
+import BookmarkStatus from "@/components/bookmark-status";
 
 interface Opportunity {
   id: number;
@@ -50,30 +52,9 @@ const BrowsePage = () => {
     // Initialize company data
     CompanyDataManager.initializeSampleData();
     
-    // Get company posted jobs from localStorage
-    const companyPostedJobs: Opportunity[] = [];
-    const savedJobs = localStorage.getItem("postedJobs");
-    if (savedJobs) {
-      try {
-        const parsedJobs = JSON.parse(savedJobs);
-        const formattedJobs: Opportunity[] = parsedJobs.map((job: any) => ({
-          id: job.id,
-          title: job.title,
-          company: job.company,
-          type: job.type,
-          location: job.location,
-          salary: job.salary,
-          description: job.description,
-          tags: job.requirements || [],
-        }));
-        companyPostedJobs.push(...formattedJobs);
-      } catch (error) {
-        console.error("Error parsing company jobs:", error);
-      }
-    }
-    
-    // Only use company posted jobs (no mock opportunities)
-    setAllOpportunities(companyPostedJobs);
+    // Get all opportunities from the service
+    const opportunities = OpportunityService.getAllOpportunities();
+    setAllOpportunities(opportunities);
     setIsLoading(false);
   }, []);
 
@@ -141,7 +122,12 @@ const BrowsePage = () => {
           </section>
 
           {/* Search and Filter Section */}
-          <section className="mb-12">
+          <section className="mb-8">
+            {/* Bookmark Status */}
+            <div className="mb-6">
+              <BookmarkStatus />
+            </div>
+            
             <div className="glassmorphic p-6 rounded-2xl border-foreground/10">
               <div className="flex flex-col md:flex-row gap-4">
                 <div className="flex-1 relative">

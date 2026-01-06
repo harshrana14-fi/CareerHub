@@ -23,6 +23,7 @@ import {
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import BookmarkCard from "@/components/bookmark-card";
+import BackupManager from "@/components/backup-manager";
 import { 
   BookmarkedOpportunity, 
   BookmarkStats,
@@ -188,6 +189,11 @@ export default function BookmarksPage() {
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             Manage your saved opportunities and companies in one place
           </p>
+        </div>
+
+        {/* Backup Management Section */}
+        <div className="mb-8">
+          <BackupManager />
         </div>
 
         {/* Stats Cards */}

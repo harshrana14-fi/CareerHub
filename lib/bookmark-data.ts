@@ -1,4 +1,6 @@
-// Bookmark/Save Jobs data management
+// Enhanced Bookmark/Save Jobs data management with database integration
+import { DatabaseService } from './database-service';
+
 export interface BookmarkedOpportunity {
   id: string;
   opportunityId: number;
@@ -56,7 +58,7 @@ export class BookmarkManager {
     return this.getBookmarkByOpportunityId(opportunityId) !== null;
   }
 
-  // Add bookmark
+  // Add bookmark with database backup
   static addBookmark(opportunity: any, type: "job" | "internship" | "scholarship" | "company", notes?: string): void {
     if (typeof window === 'undefined') return;
     
@@ -85,15 +87,23 @@ export class BookmarkManager {
 
     bookmarks.push(bookmark);
     localStorage.setItem(this.BOOKMARKS_KEY, JSON.stringify(bookmarks));
+    
+    // Create backup after significant changes
+    if (bookmarks.length % 5 === 0) {
+      DatabaseService.createBackup();
+    }
   }
 
-  // Remove bookmark
+  // Remove bookmark with database backup
   static removeBookmark(opportunityId: number): void {
     if (typeof window === 'undefined') return;
     
     const bookmarks = this.getBookmarks();
     const filteredBookmarks = bookmarks.filter(bookmark => bookmark.opportunityId !== opportunityId);
     localStorage.setItem(this.BOOKMARKS_KEY, JSON.stringify(filteredBookmarks));
+    
+    // Create backup after removal
+    DatabaseService.createBackup();
   }
 
   // Toggle bookmark
@@ -246,9 +256,13 @@ export class BookmarkManager {
     return Date.now().toString(36) + Math.random().toString(36).substr(2);
   }
 
-  // Clear all bookmarks (for testing/reset)
+  // Clear all bookmarks with backup
   static clearAllBookmarks(): void {
     if (typeof window === 'undefined') return;
+    
+    // Create backup before clearing
+    DatabaseService.createBackup();
+    
     localStorage.removeItem(this.BOOKMARKS_KEY);
     localStorage.removeItem(this.COLLECTIONS_KEY);
   }
@@ -260,11 +274,14 @@ export class BookmarkManager {
     return JSON.stringify({ bookmarks, collections }, null, 2);
   }
 
-  // Import bookmarks (for restore)
+  // Import bookmarks with backup
   static importBookmarks(data: string): void {
     if (typeof window === 'undefined') return;
     
     try {
+      // Create backup before importing
+      DatabaseService.createBackup();
+      
       const parsed = JSON.parse(data);
       if (parsed.bookmarks) {
         localStorage.setItem(this.BOOKMARKS_KEY, JSON.stringify(parsed.bookmarks));
@@ -272,8 +289,31 @@ export class BookmarkManager {
       if (parsed.collections) {
         localStorage.setItem(this.COLLECTIONS_KEY, JSON.stringify(parsed.collections));
       }
+      
+      // Create backup after successful import
+      DatabaseService.createBackup();
     } catch (error) {
       throw new Error('Invalid bookmark data format');
     }
+  }
+
+  // Get database statistics
+  static getDatabaseStats() {
+    return DatabaseService.getDatabaseStats();
+  }
+
+  // Get available backups
+  static getBackups() {
+    return DatabaseService.getBackups();
+  }
+
+  // Restore from backup
+  static restoreFromBackup(backupIndex: number): boolean {
+    return DatabaseService.restoreFromBackup(backupIndex);
+  }
+
+  // Sync data (for future server integration)
+  static async syncData(): Promise<boolean> {
+    return await DatabaseService.syncData();
   }
 }
