@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 import { signIn } from "next-auth/react"
 import { signupAction } from "../action";
-import toast from "react-hot-toast";
+import { toast } from "@/hooks/use-toast";
 
 // ✅ Existing Components
 import Header from "@/components/header"
@@ -97,10 +97,11 @@ export default function SignupPage() {
         setResendCountdown(60)
         setCanResend(false);
         // Show toast
-      toast.success("Complete your profile to get the best job matches!", {
-        duration: 10000, // 8 seconds
-        position: "top-right",
-      })
+       toast({
+        title: "Account Created!",
+        description: "Complete your profile to get the best job matches!",
+        type: "foreground",
+      });
       // Redirect to profile page instead of dashboard
       router.push("/profile/edit");
       } else {

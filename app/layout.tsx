@@ -5,7 +5,7 @@ import { Analytics } from "@vercel/analytics/next"
 import Script from "next/script"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
-import { Toaster } from "react-hot-toast"
+import { Toaster } from "@/components/ui/toaster";
 import { AuthSessionProvider } from "@/provider/auth-provider"
 import Footer from "@/components/footer"
 
