@@ -75,6 +75,7 @@ const data = {
                 { title: "Social Links", url: "/dashboard/company/profile/social-links" },
                 { title: "Technical & Operational Stack", url: "/dashboard/company/profile/technical-operational-stack" },
                 { title: "Culture & Working Style", url: "/dashboard/company/profile/culture-and-working-style" },
+                { title: "Hiring Preferences", url: "/dashboard/company/profile/recruitment-specifics" },
             ],
         }, {
             title: "Settings",
