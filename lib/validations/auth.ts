@@ -17,3 +17,44 @@ export const signupSchema = z.object({
 })
 
 export type SignupFormData = z.infer<typeof signupSchema>
+
+// Company signup schema
+export const companySignupSchema = z.object({
+    name: z.string().min(2, "Company name must be at least 2 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+        .regex(/[0-9]/, "Password must contain at least one number")
+        .regex(/[@$!%*?&]/, "Password must contain at least one special character"),
+    confirmPassword: z.string(),
+    website: z.string().optional(),
+    location: z.string().min(1, "Location is required"),
+    industry: z.string().min(1, "Industry is required"),
+    size: z.enum(['1-10', '11-50', '51-200', '201-500', '500+']),
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+})
+
+export type CompanySignupFormData = z.infer<typeof companySignupSchema>
+
+// Job posting schema
+export const jobPostingSchema = z.object({
+    title: z.string().min(1, "Job title is required"),
+    description: z.string().min(50, "Description must be at least 50 characters"),
+    requirements: z.array(z.string()).min(1, "At least one requirement is needed"),
+    location: z.string().min(1, "Location is required"),
+    type: z.enum(['full-time', 'part-time', 'contract', 'internship']),
+    remote: z.boolean(),
+    salary: z.object({
+        min: z.number().optional(),
+        max: z.number().optional(),
+        currency: z.string().default('USD'),
+    }).optional(),
+    skills: z.array(z.string()),
+    experience: z.string().min(1, "Experience level is required"),
+})
+
+export type JobPostingFormData = z.infer<typeof jobPostingSchema>
