@@ -5,10 +5,12 @@ import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
 import dbConnect from "@/db/mongoDb";
 import UserModel from "@/models/User.Model";
+import { CompanyModel } from "@/models/Company.Model";
 
 type Credentials = {
     email?: string;
     password?: string;
+    userType?: string;
 };
 
 const buildUsername = (email: string) =>
@@ -27,6 +29,7 @@ export const authOptions: NextAuthOptions = {
             credentials: {
                 email: { label: "Email", type: "text" },
                 password: { label: "Password", type: "password" },
+                userType: { label: "User Type", type: "text" },
             },
             async authorize(credentials) {
                 console.log("Authorizing with credentials:", credentials);
@@ -34,24 +37,37 @@ export const authOptions: NextAuthOptions = {
 
                 const email = credentials?.email?.toLowerCase().trim();
                 const password = credentials?.password || "";
+                const userType = credentials?.userType || "user";
 
                 if (!email || !password) {
                     throw new Error("Email and password are required");
                 }
 
-                const user = await UserModel.findOne({
-                    $or: [
-                        { email },
-                        { username: email }, // allow username login by entering username in email field
-                    ],
-                });
+                let user;
+                let accountType = "user";
+
+                if (userType === "company") {
+                    user = await CompanyModel.findOne({ email });
+                    accountType = "company";
+                } else {
+                    user = await UserModel.findOne({
+                        $or: [
+                            { email },
+                            { username: email }, // allow username login by entering username in email field
+                        ],
+                    });
+                }
 
                 if (!user) {
                     throw new Error("No account found for these credentials");
                 }
 
-                if (!user.isVarified) {
+                if (accountType === "user" && !user.isVarified) {
                     throw new Error("Please verify your account before logging in");
+                }
+
+                if (accountType === "company" && !user.isVerified) {
+                    throw new Error("Please verify your company account before logging in");
                 }
 
                 if (!user.password) {
@@ -67,10 +83,11 @@ export const authOptions: NextAuthOptions = {
                 return {
                     _id: user._id,
                     email: user.email,
-                    username: user.username,
+                    username: accountType === "user" ? user.username : undefined,
                     name: user.name,
-                    image: user.image,
-                    isVarified: user.isVarified,
+                    image: accountType === "user" ? user.image : user.logo,
+                    isVarified: accountType === "user" ? user.isVarified : user.isVerified,
+                    accountType,
                 } as any; // cast to satisfy NextAuth return shape
             },
         }),
@@ -130,6 +147,7 @@ export const authOptions: NextAuthOptions = {
                 token.name = user.name ?? token.name;
                 token.email = user.email ?? token.email;
                 token.image = (user as any).image ?? token.image;
+                token.accountType = (user as any).accountType ?? "user";
             }
             return token;
         },
@@ -137,16 +155,23 @@ export const authOptions: NextAuthOptions = {
         async session({ session, token }) {
             await dbConnect();
             const email = session.user.email;
+            const accountType = token.accountType as string || "user";
 
-            const userData = await UserModel.findOne({ email });
+            let userData;
+            if (accountType === "company") {
+                userData = await CompanyModel.findOne({ email });
+            } else {
+                userData = await UserModel.findOne({ email });
+            }
 
             const mutableUser = session.user as any;
 
             mutableUser._id = token._id || userData?._id?.toString();
-            mutableUser.isVarified = token.isVarified || userData?.isVarified;
+            mutableUser.isVarified = token.isVarified || (accountType === "user" ? userData?.isVarified : userData?.isVerified);
             mutableUser.username = token.username || userData?.username;
             mutableUser.name = token.name || userData?.name;
-            mutableUser.image = token.image || userData?.image || "";
+            mutableUser.image = token.image || (accountType === "user" ? userData?.image : userData?.logo) || "";
+            mutableUser.accountType = accountType;
 
             return session;
         },

@@ -17,6 +17,7 @@ export default function LoginPage() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    userType: "user",
   })
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
@@ -41,6 +42,7 @@ export default function LoginPage() {
       const result = await signIn("credentials", {
         email: formData.email,
         password: formData.password,
+        userType: formData.userType,
         redirect: false,
       })
       if (result?.error) {
@@ -118,6 +120,37 @@ export default function LoginPage() {
 
               {/* Login Form */}
               <form onSubmit={handleSubmit} className="space-y-5">
+                {/* User Type Selection */}
+                <div className="form-group space-y-2">
+                  <label className="block text-sm font-medium text-foreground">
+                    Account Type
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, userType: "user" }))}
+                      className={`p-3 rounded-lg border text-sm font-medium transition-all ${
+                        formData.userType === "user"
+                          ? "border-primary bg-primary/10 text-primary"
+                          : "border-border hover:border-primary/50"
+                      }`}
+                    >
+                      Job Seeker
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setFormData(prev => ({ ...prev, userType: "company" }))}
+                      className={`p-3 rounded-lg border text-sm font-medium transition-all ${
+                        formData.userType === "company"
+                          ? "border-primary bg-primary/10 text-primary"
+                          : "border-border hover:border-primary/50"
+                      }`}
+                    >
+                      Company
+                    </button>
+                  </div>
+                </div>
+
                 {/* Email */}
                 <div className="form-group space-y-2">
                   <label className="block text-sm font-medium text-foreground">

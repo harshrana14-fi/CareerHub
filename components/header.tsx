@@ -129,9 +129,12 @@ export default function Header() {
       : "flex items-center gap-2";
 
     if (isAuthenticated) {
+      const user = session?.user as any;
+      const dashboardLink = user?.accountType === "company" ? "/company-dashboard" : "/dashboard";
+      
       return (
         <div className={wrapperClass}>
-          <Link href="/dashboard" className={mobile ? "w-full" : ""}>
+          <Link href={dashboardLink} className={mobile ? "w-full" : ""}>
             <Button className={`${mobile ? "w-full" : ""} flex items-center justify-center gap-2 glassmorphic-button-primary shadow-lg hover:shadow-xl transition-all hover:scale-105`}>
               <Sparkles className="w-4 h-4" />
               {mobile ? "Dashboard" : "Dashboard"}
@@ -143,6 +146,12 @@ export default function Header() {
 
     return (
       <div className={wrapperClass}>
+        <Link href="/company-signup" className={mobile ? "w-full" : ""}>
+          <Button className={`${mobile ? "w-full justify-center" : "justify-center"}`} variant="outline">
+            <Building2 className="w-4 h-4 mr-1.5" />
+            {mobile ? "For Companies" : "Companies"}
+          </Button>
+        </Link>
 
         <Link href="/login" className={mobile ? "w-full" : ""}>
           <Button className={`${mobile ? "w-full justify-center" : "justify-center"}`} variant="outline">
