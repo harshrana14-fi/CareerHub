@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
-import { signIn } from "next-auth/react"
+import { getSession, signIn } from "next-auth/react"
 import { signupAction, verifyOtpAction, resendOtpAction } from "../action"
+import { el } from "date-fns/locale"
 
 
 /**
@@ -40,7 +41,7 @@ export default function SignupPage() {
   const [resendCountdown, setResendCountdown] = useState(60)
   const [canResend, setCanResend] = useState(false)
 
-  // Countdown timer for resend button
+  // Countdown timer for resend button (runs every second while visible)
   useEffect(() => {
     if (showOtpForm && resendCountdown > 0) {
       const timer = setTimeout(() => {
@@ -51,6 +52,43 @@ export default function SignupPage() {
       setCanResend(true)
     }
   }, [showOtpForm, resendCountdown])
+
+  // When OTP form is shown, check session once and route based on role
+  useEffect(() => {
+    if (!showOtpForm) return
+
+    let mounted = true
+
+    const checkRoleAndRedirect = async () => {
+      // small delay to allow session establishment
+      await new Promise((r) => setTimeout(r, 500))
+      if (!mounted) return
+      try {
+        const session = await getSession()
+        const userRole = (session?.user as any)?.role
+
+        if (!userRole) {
+          router.push("/select-role")
+        } else if (userRole === "company") {
+          router.push("/dashboard/company")
+        }
+        else if (userRole === "user") {
+          router.push("/dashboard")
+        }
+        else {
+          router.push("/")
+        }
+      } catch (err) {
+        // ignore errors here; user may not be signed in yet
+      }
+    }
+
+    checkRoleAndRedirect()
+
+    return () => {
+      mounted = false
+    }
+  }, [showOtpForm, router])
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +105,7 @@ export default function SignupPage() {
   const handleGoogleSignIn = async () => {
     try {
       setIsLoading(true)
-      await signIn("google", { callbackUrl: "/dashboard" })
+      await signIn("google", { callbackUrl: "/check-role" })
     } catch (err) {
       setError("Failed to sign in with Google")
       console.error("Google sign in error:", err)
