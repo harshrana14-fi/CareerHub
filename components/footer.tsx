@@ -31,9 +31,9 @@ export default function Footer() {
           <div className="md:pl-25">
             <h4 className="font-semibold text-foreground mb-4 text-center">Opportunities</h4>
             <ul className="space-y-2 text-center">
-              <li><a href="#" className="footer-link">Jobs</a></li>
-              <li><a href="#" className="footer-link">Scholarships</a></li>
-              <li><a href="#" className="footer-link">Internships</a></li>
+              <li><a href="/job" className="footer-link">Jobs</a></li>
+              <li><a href="/scholarship" className="footer-link">Scholarships</a></li>
+              <li><a href="/internship" className="footer-link">Internships</a></li>
             </ul>
           </div>
 
@@ -41,9 +41,9 @@ export default function Footer() {
           <div className="md:pl-35">
             <h4 className="font-semibold text-foreground mb-4 text-center">Resources</h4>
             <ul className="space-y-2 text-center">
-              <li><a href="#" className="footer-link">Career Blog</a></li>
-              <li><a href="#" className="footer-link">Resume Tips</a></li>
-              <li><a href="#" className="footer-link">Interview Prep</a></li>
+              <li><a href="/career-blog" className="footer-link">Career Blog</a></li>
+              <li><a href="/resume-tips" className="footer-link">Resume Tips</a></li>
+              <li><a href="/interview-prep" className="footer-link">Interview Prep</a></li>
             </ul>
           </div>
 
@@ -51,9 +51,9 @@ export default function Footer() {
           <div className="md:pl-45">
             <h4 className="font-semibold text-foreground mb-4 text-center">Legal</h4>
             <ul className="space-y-2 text-center">
-              <li><a href="#" className="footer-link">Privacy</a></li>
-              <li><a href="#" className="footer-link">Terms</a></li>
-              <li><a href="#" className="footer-link">Contact</a></li>
+              <li><a href="/privacy" className="footer-link">Privacy</a></li>
+              <li><a href="/terms" className="footer-link">Terms</a></li>
+              <li><a href="/contact" className="footer-link">Contact</a></li>
             </ul>
           </div>
         </div>
