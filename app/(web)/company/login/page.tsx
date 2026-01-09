@@ -109,6 +109,7 @@ export default function CompanyLoginPage() {
                 />
               </div>
             </div>
+           
 
             {/* Error Message */}
             {error && (
@@ -125,6 +126,7 @@ export default function CompanyLoginPage() {
             >
               {isLoading ? "Signing in..." : "Sign In"}
             </Button>
+            
           </form>
 
           {/* Divider */}
